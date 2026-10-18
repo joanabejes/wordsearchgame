@@ -5,18 +5,46 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-   <h1>AquaSearch</h1>
-   <div id="grid"></div>
-   <button id="new-game"> 🔄 New Game 🔄</button>
-   <h2>Words to find:</h2>
-   <ul id="word-list"></ul>
-   <p id="message"></p>
+   <div id="game-layout">
+        <!-- left settings -->
+        <div id="left-panel">
+            <h3>Settings</h3>
+            <label>Level:</label>
+            <div class = "option-group" id="level-group">
+                <button class="option-btn" data-size="8">Easy (8x8)</button>
+                <button class="option-btn active" data-size="10">Medium (10x10)</button>
+                <button class="option-btn" data-size="12">Hard (12x12)</button>
+            </div>
+            <label>Language:</label>
+            <div class = "option-group" id="language-group">
+                <button class="option-btn active" data-language="en">English</button>
+                <button class="option-btn" data-language="es">Español</button>
+                <button class="option-btn" data-language="de">Deutsch</button>   
+            </div>
+         </div>
 
-   <div id="victory" class = "hidden">
-    <h2> 🏆 Congratulations!! 🏆</h2>
-    <p> You Just Saved This Ecosysystem!! </p>
-    <button id="victory-button"> 🔄 Play Again 🔄</button>
-   </div>
-   <script src="script.js"></script>
+        <!-- center settings -->  
+        <div id="center-panel">
+            <h1>AquaSearch</h1>
+            <div id="grid"></div>
+            <button id="new-game"> New Game (<span id="games-left">3</span>)</button>
+            <p id="message"></p>
+            </div>  
+
+        <!-- right settings -->  
+        <div id="right-panel">
+            <h3>Words to Find</h3>
+            <ul id="word-list"></ul>
+        </div>
+
+            <!-- victory settings -->  
+        <div id="victory" class = "hidden">
+                <h2> 🏆 Congratulations!! 🏆</h2>
+                <p> You Just Saved This Ecosysystem!! </p>
+                <button id="victory-button"> Play Again</button>
+        </div>
+
+        <script src="script.js"></script>
+    </div>
 </body>
 </html>

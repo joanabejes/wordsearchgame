@@ -2,21 +2,52 @@
 // letters to fill the board
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 // board size: 10x10
-const SIZE = 10;
+let SIZE = 10;
 // words
-const WORDS_POOL = [
-    "WATER", "RAIN", "RIVER", "CLOUD", "LAKE", "SEA", "ECOSYSTEM", 
-    "ENERGY", "ECOLOGY", "CLIMATE", "WEATHER", "RECYCLE", "OCEAN", 
-    "POLLUTION", "SOLAR", "NATURE", "EARTH", "GREEN", "FOREST",
-    "ANIMAL", "PLANT", "BIOME", "PLANET"
-];
+const WORD_POOLS = {
+    en: [
+        "WATER", "RAIN", "RIVER", "CLOUD", "LAKE", "SEA", "ECOSYSTEM", 
+        "ENERGY", "ECOLOGY", "CLIMATE", "WEATHER", "RECYCLE", "OCEAN", 
+        "POLLUTION", "SOLAR", "NATURE", "EARTH", "GREEN", "FOREST",
+        "ANIMAL", "PLANT", "BIOME", "PLANET"
+    ],
+    es: [
+        "AGUA", "LLUVIA", "RIO", "NUBE", "LAGO", "MAR", "ECOSISTEMA",
+        "ENERGIA", "ECOLOGIA", "CLIMA", "TIEMPO", "RECICLAR", "OCEANO",
+        "ARBOL", "SOLAR", "NATURALEZA", "TIERRA", "VERDE",
+        "BOSQUE", "ANIMAL", "PLANTA", "BIOMA", "PLANETA"
+    ],
+    de: [
+        "WASSER", "REGEN", "FLUSS", "WOLKE", "SEE", "MEER", "OKOSYSTEM",
+        "ENERGIE", "OKOLOGIE", "KLIMA", "WETTER", "RECYCLING", "OZEAN",
+        "SOLAR", "NATUR", "ERDE", "GRUN", "WALD","TIER", "PFLANZE", 
+        "BIOM", "PLANET", "ABFALL"
+    ]
+};
+// pool of the current language
+let WORDS_POOL = WORD_POOLS.en;
+
+// settings
+let savedSize = null;
+let savedLanguage = null;
+try {
+    savedSize = localStorage.getItem("aquasearch-size");
+    savedLanguage = localStorage.getItem("aquasearch-language");
+} catch (error) {
+}
+if (savedSize !== null) {
+    SIZE = parseInt(savedSize);
+}
+if (savedLanguage !== null && WORD_POOLS[savedLanguage] !== undefined) {
+    WORDS_POOL = WORD_POOLS[savedLanguage];
+}
+
 
 // words per game
 const WORDS_PER_GAME = 10;
 
 // the words of the curret game
 let WORDS = [];
-
 
 // the grid starts as an empty list
 const grid = [];
@@ -28,7 +59,7 @@ const wordListUl = document.getElementById("word-list");
 // random selection of words
 function chooseRandomWords() {
     // copying
-    const pool = [...WORDS_POOL]; 
+    const pool = [...WORDS_POOL].filter(word => word.length <= SIZE); 
     const selection = [];
 
     while (selection.length < WORDS_PER_GAME && pool.length > 0) {
@@ -110,8 +141,8 @@ function handleCellClick (row, col, cellElement){
        cellElement.classList.add("selected");
    }else{ // unselect
        firstCell.classList.remove("selected");
-       checkWord (firstRow, firstCol, row, col);
        firstCell = null;
+       checkWord (firstRow, firstCol, row, col);
    }
 }
 
@@ -177,11 +208,11 @@ function startGame(){
    grid.length = 0;
 
    //creating the empty grid
-   // loop that iterates through the 10 lines
+   // loop that iterates through the rows
     for (let row = 0; row < SIZE; row++){
     // for each line a new list of letters
         const newRow = [];
-        // loop that iterates through the 10 columns
+        // loop that iterates through the columns
         for (let col = 0; col < SIZE; col++){
                newRow.push("");
         }
@@ -190,10 +221,17 @@ function startGame(){
     }
 
    // hiding every word
-    for (const word of WORDS){
-        let placed = placeWord(word);
-        while (!placed){
+    const requestedWords = [...WORDS];
+    WORDS = [];
+    for (const word of requestedWords){
+        let placed = false;
+        let totalAttempts = 0;
+        while (!placed && totalAttempts < 100){
             placed = placeWord(word);
+            totalAttempts++;
+        }
+        if (placed){
+            WORDS.push(word);
         }
     }
 
@@ -211,6 +249,9 @@ function startGame(){
     foundCount = 0;
     firstCell = null;
     document.getElementById("message").textContent = "";
+
+    // resizing the grid for current level
+    gridDiv.style.gridTemplateColumns = "repeat("+ SIZE + ", 40px)";
 
     // cleaning the screen before drawing
     gridDiv.innerHTML = "";
@@ -246,10 +287,84 @@ function findWord(word) {
 
 // staring the first game when page loads
 startGame();
-document.getElementById("new-game").addEventListener("click", startGame);
+
+// game limit
+const MAX_NEW_GAMES = 3;
+let newGamesLeft = MAX_NEW_GAMES;
+document.getElementById("games-left").textContent = newGamesLeft;
+
+document.getElementById("new-game").addEventListener("click", function() {
+    if (newGamesLeft<=0){
+        return;
+    }
+    newGamesLeft--;
+    document.getElementById("games-left").textContent = newGamesLeft;
+    startGame();
+    if (newGamesLeft ===0){
+        document.getElementById("new-game").disabled = true;
+    }
+});
+
+// victory
 document.getElementById("victory-button").addEventListener("click", function() {
     document.getElementById("victory").classList.add("hidden");
     startGame();
 });
 
+// level
+const levelButtons = document.querySelectorAll("#level-group .option-btn");
+for (const btn of levelButtons){
+   btn.addEventListener("click", function() {
+       //removing highlight
+        for (const b of levelButtons){
+            b.classList.remove("active");
+        }
+        //highlighting the clicked button
+        btn.classList.add("active");
+        //applying the new level
+        SIZE = parseInt(btn.dataset.size);
+        // saving choice for the next time
+       try {
+        localStorage.setItem("aquasearch-size", SIZE);
+       } catch (error){}
+        startGame();
+   });
+}
 
+// language
+const languageButtons = document.querySelectorAll("#language-group .option-btn");
+for (const btn of languageButtons){
+   btn.addEventListener("click", function() {
+       //removing highlight
+        for (const b of languageButtons){
+            b.classList.remove("active");
+        }
+        //highlighting the clicked button
+        btn.classList.add("active");
+        //applying the new language
+        WORDS_POOL = WORD_POOLS[btn.dataset.language];
+        try {
+            localStorage.setItem("aquasearch-language", btn.dataset.language);
+        } catch (error) {}
+        startGame();
+   });
+}   
+
+// making the buttons match the loaded settings
+for (const btn of levelButtons){
+    if (parseInt(btn.dataset.size) === SIZE){
+        btn.classList.add("active");
+    }else{
+        btn.classList.remove("active");
+    }
+}
+
+if (savedLanguage !== null && WORD_POOLS[savedLanguage] !== undefined){
+    for (const btn of languageButtons){
+        if (btn.dataset.language === savedLanguage){
+            btn.classList.add("active");
+        }else{
+            btn.classList.remove("active");
+        }
+    }
+}   
