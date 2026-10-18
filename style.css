@@ -218,8 +218,8 @@ h1 {color: #0277bd;}
     }
 
     #center-panel {order: 2; }
-    #right-panel { order: 1; }
-    #left-panel { order: 3; }
+    #right-panel { order: 3; }
+    #left-panel { order: 1; }
 
     #left-panel{ 
         width: 100%;
@@ -258,7 +258,7 @@ h1 {color: #0277bd;}
         margin: 8px 4px 0;
     }
     #grid{ 
-        --cell-size: min(calc((100vw - 24px), 40px));
+        --cell-size: min(6.2vw, 40px);
         gap: 1px;
         margin: 8px auto;
     }
