@@ -17,9 +17,9 @@ Every hidden word was chosen to introduce players important ecological themes: s
 5. Find all the words to save the ecosystem
 
 ## Future Versions
-[ ] Multiple difficulty levels (different grid sizes and hints instead of words)
-[ ] Multiple languages for international accessibility
-[ ] Diagonal and reversed word placement
-[ ] New themed word packs (recycling, renewable energy, biodiversity and others)
-[ ] Time and score system
+[ X ] Multiple difficulty levels (different grid sizes and hints instead of words)
+[ X ] Multiple languages for international accessibility
+[ X ] Diagonal and reversed word placement
+[   ] New themed word packs (recycling, renewable energy, biodiversity and others)
+[   ] Time and score system
 

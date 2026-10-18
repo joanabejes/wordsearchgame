@@ -179,6 +179,12 @@ function getDirections(){
     return currentLevel === "easy" ? DIRECTIONS_EASY : DIRECTIONS_FULL;
 }
 
+// references
+const gridDiv = document.getElementById("grid");
+const wordListUl = document.getElementById("word-list");
+const levelButtons = document.querySelectorAll("#level-group .option-btn");
+const languageButtons = document.querySelectorAll("#language-group .option-btn");
+
 // settings
 let savedSize = null;
 let savedLanguage = null;
@@ -189,13 +195,22 @@ try {
     savedLevel = localStorage.getItem("aquasearch-level")
 } catch (error) {
 }
-if (savedSize !== null) {
+
+function savedValueIsValid(value, buttons,attribute){
+    if (value == null) return false;
+    for (const btn of buttons){
+        if (btn.dataset[attribute] === value) return true;
+    }
+    return false;
+}
+
+if (savedValueIsValid(savedSize, levelButtons, "size")){
     SIZE = parseInt(savedSize);
 }
-if (savedLanguage !== null && WORD_POOLS[savedLanguage] !== undefined) {
+if (savedValueIsValid(savedLanguage, languageButtons, "language")){
     currentLanguage = savedLanguage;
 }
-if (savedLevel === "easy" || savedLevel === "medium" || savedLevel === "hard"){
+if (savedValueIsValid(savedLanguage, levelButtons, "levels")){
     currentLevel = savedLevel;
 }
 
@@ -208,10 +223,6 @@ let WORDS = [];
 
 // the grid starts as an empty list
 const grid = [];
-
-// references
-const gridDiv = document.getElementById("grid");
-const wordListUl = document.getElementById("word-list");
 
 // random selection of words
 function chooseRandomWords() {
@@ -420,7 +431,7 @@ function startGame(){
     document.getElementById("message").textContent = "";
 
     // resizing the grid for current level
-    gridDiv.style.gridTemplateColumns = "repeat("+ SIZE + ", 40px)";
+    gridDiv.style.gridTemplateColumns = "repeat("+ SIZE + ", var(--cell-size))";
 
     // cleaning the screen before drawing
     gridDiv.innerHTML = "";
@@ -437,7 +448,7 @@ function startGame(){
         item.dataset.number = number;
         // showing the hints instead of words in hard mode
         if (currentLevel == "hard"){
-            item.textContent = number + ". " + HINTS[currentLanguage][word] || word;
+            item.textContent = number + ". " + (HINTS[currentLanguage][word] || word);
         } else {
             item.textContent = number + ". " + word;
         }
@@ -491,7 +502,6 @@ document.getElementById("victory-button").addEventListener("click", function() {
 });
 
 // level
-const levelButtons = document.querySelectorAll("#level-group .option-btn");
 for (const btn of levelButtons){
    btn.addEventListener("click", function() {
        //removing highlight
@@ -513,7 +523,6 @@ for (const btn of levelButtons){
 }
 
 // language
-const languageButtons = document.querySelectorAll("#language-group .option-btn");
 for (const btn of languageButtons){
    btn.addEventListener("click", function() {
        //removing highlight

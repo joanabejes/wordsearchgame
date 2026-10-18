@@ -9,6 +9,7 @@ h1 {color: #0277bd;}
 
 #grid {
    display: grid;
+   --cell-size: 40px;
    grid-template-columns: repeat(10, 40px);
    gap: 2px;
    justify-content: center;
@@ -16,8 +17,9 @@ h1 {color: #0277bd;}
 }
 
 .cell {
-   width: 40px;
-   height: 40px;
+   width: var(--cell-size);
+   height: var(--cell-size);
+   box-sizing: border-box;
    background: #e0f7fa;
    border: 2px solid #0277bd;
    display: flex;
@@ -207,4 +209,73 @@ h1 {color: #0277bd;}
     color: #01234d;
     font-weight: bold;
     border-color:#4fc3f7
+}
+
+/* mobile */
+@media (max-width: 1100px){
+    #game-layout{
+        flex-direction: column;
+    }
+
+    #center-panel {order: 2; }
+    #right-panel { order: 1; }
+    #left-panel { order: 3; }
+
+    #left-panel{ 
+        width: 100%;
+        padding: 8px 10px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    #left-panel h3 { display: none}
+
+    #left-panel label {
+        margin: 0;
+        font-size: 10px;
+    }
+
+
+    .option-group{
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin: 0;
+    }
+
+    #option-btn {
+        padding: 5px 7px;
+        font-size:11px;
+    }
+
+    #center-panel{ width: 100%;}
+
+    #center-panel h1{
+        font-size: 20px;
+        margin: 8px 4px 0;
+    }
+    #grid{ 
+        --cell-size: min(calc((100vw - 24px), 40px));
+        gap: 1px;
+        margin: 8px auto;
+    }
+
+    .cell { 
+        font-size: 11px;
+        border-width: 1px;
+    }
+
+    #right-panel {
+        width: 100%;
+        padding: 12px 14px;
+    }
+
+    #word-list li {
+        display: block;
+        margin: 3px 0;
+        font-size: 13px;
+    }
 }
