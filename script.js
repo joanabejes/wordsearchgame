@@ -137,7 +137,7 @@ const HINTS = {
         DEGRADIERUNG: "Allmähliche Verschlechterung der Umweltqualität",
         UMWELT: "Gesamtheit der äußeren Bedingungen, die Lebewesen beeinflussen",
         SCHADSTOFF: "Substanz, die natürliche Systeme negativ beeinträchtigt",
-        ERNEURBAR: "Durch natürliche Prozesse wiederherstellbar",
+        ERNEUERBAR: "Durch natürliche Prozesse wiederherstellbar",
         ATMOSPHARE: "Gasförmige Hülle, die einen Planeten umgibt",
         ERHALTUNG: "Schutz natürlicher Ressourcen und biologischer Vielfalt",
         ATMUNG: "Biologischer Prozess zur Energiegewinnung in Zellen",
