@@ -250,7 +250,7 @@ h1 {color: #0277bd;}
         margin: 0;
     }
 
-    #option-btn {
+    .option-btn {
         padding: 5px 7px;
         font-size:11px;
     }
