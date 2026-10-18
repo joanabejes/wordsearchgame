@@ -251,7 +251,12 @@ h1 {color: #0277bd;}
         font-size:11px;
     }
 
-    #center-panel{ width: 100%;}
+    #center-panel{ 
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
     #center-panel h1{
         font-size: 20px;
@@ -270,6 +275,7 @@ h1 {color: #0277bd;}
 
     #right-panel {
         width: 100%;
+        flex: 1;
         padding: 12px 14px;
     }
 
